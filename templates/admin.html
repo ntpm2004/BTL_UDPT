@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý sản phẩm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4"> Quản lý sản phẩm</h2>
+
+        <!-- ➕ Thêm sản phẩm mới -->
+        <form method="POST" action="{{ url_for('products.add_product') }}" class="card p-4 mb-4">
+            <h5>➕ Thêm sản phẩm mới</h5>
+            <input class="form-control mb-2" type="text" name="id" placeholder="Mã sản phẩm" required>
+            <input class="form-control mb-2" type="text" name="name" placeholder="Tên sản phẩm" required>
+            <input class="form-control mb-2" type="number" name="price" placeholder="Giá" required>
+            <input class="form-control mb-3" type="number" name="quantity" placeholder="Số lượng" required>
+            <button class="btn btn-custom w-100">Thêm sản phẩm</button>
+        </form>
+
+        <!-- 🔧 Chức năng hàng loạt -->
+        <form method="POST" action="{{ url_for('products.update_all_prices') }}" class="mb-3 d-flex gap-2">
+            <input class="form-control w-25" type="number" name="change" placeholder="Tăng giá (+)" value="10" required>
+            <button class="btn btn-primary">Cập nhật tất cả giá</button>
+        </form>
+
+        <form method="POST" action="{{ url_for('products.discount_all') }}" class="mb-4 d-flex gap-2">
+            <input class="form-control w-25" type="number" name="discount" placeholder="Giảm giá (-)" value="5000"
+                required>
+            <button class="btn btn-danger">Giảm giá hàng loạt</button>
+        </form>
+
+        <!-- 📦 Danh sách sản phẩm -->
+        <h4> Danh sách sản phẩm</h4>
+        <table class="table table-striped">
+            <tr>
+                <th>Mã</th>
+                <th>Tên</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Hành động</th>
+            </tr>
+            {% for pid, data in products.items() %}
+            <tr>
+                <td>{{ pid }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.price }}₫</td>
+                <td>{{ data.quantity }}</td>
+                <td>
+                    <!-- 📝 Nút sửa -->
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#editModal{{ pid }}">Sửa</button>
+                    <!-- 🗑 Nút xóa -->
+                    <a href="{{ url_for('products.delete_product', pid=pid) }}" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Bạn có chắc muốn xóa không?')">Xóa</a>
+                </td>
+            </tr>
+
+            <!-- Modal sửa sản phẩm -->
+            <div class="modal fade" id="editModal{{ pid }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form method="POST" action="{{ url_for('products.update_product', pid=pid) }}">
+                            <div class="modal-header">
+                                <h5 class="modal-title"> Sửa sản phẩm {{ pid }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input class="form-control mb-2" type="text" name="name" value="{{ data.name }}"
+                                    required>
+                                <input class="form-control mb-2" type="number" name="price" value="{{ data.price }}"
+                                    required>
+                                <input class="form-control mb-2" type="number" name="quantity"
+                                    value="{{ data.quantity }}" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Lưu</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </table>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary w-25">🚪 Đăng xuất</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

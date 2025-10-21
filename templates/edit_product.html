@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa sản phẩm</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <h2> Sửa sản phẩm</h2>
+    <form method="POST" action="/update/{{ pid }}">
+        <label>Tên sản phẩm:</label>
+        <input type="text" name="name" value="{{ product['name'] }}" required><br>
+        <label>Giá:</label>
+        <input type="number" name="price" value="{{ product['price'] }}" required><br>
+        <label>Số lượng:</label>
+        <input type="number" name="quantity" value="{{ product['quantity'] }}" required><br>
+        <button type="submit"> Lưu thay đổi</button>
+    </form>
+    <br>
+    <a href="/admin">⬅ Quay lại</a>
+</body>
+
+</html>

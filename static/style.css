@@ -1,0 +1,24 @@
+body {
+    background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
+    font-family: "Segoe UI", sans-serif;
+}
+
+.container {
+    margin-top: 60px;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-custom {
+    background-color: #007bff;
+    color: white;
+    transition: 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+    color: white;
+}
