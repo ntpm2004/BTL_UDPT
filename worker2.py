@@ -18,17 +18,17 @@ def do_task():
     return jsonify({"status": "processing"}), 200
 
 def process_task(action, value, subset):
-    print(f"⚙️ Worker đang xử lý {len(subset)} sản phẩm...")
+    print(f" Worker đang xử lý {len(subset)} sản phẩm...")
 
     for pid, product in subset.items():
         time.sleep(0.05)  # mô phỏng xử lý lâu
         if action == "discount":
             product["price"] = max(product["price"] - value, 0)
-        elif action == "update_prices":
+        elif action == "increase":
             product["price"] += value
-        db.set(pid, product)  # ✅ Ghi trực tiếp lại vào file JSON
+        db.set(pid, product)  # Ghi trực tiếp lại vào file JSON
 
-    print("✅ Worker 2 hoàn thành và đã cập nhật products.json")
+    print("Worker 2 hoàn thành và đã cập nhật products.json")
 
 if __name__ == "__main__":
     app.run(port=7102)  # ⚠️ đổi port 7102, 7103 cho worker2, worker3

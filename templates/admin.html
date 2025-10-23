@@ -12,7 +12,7 @@
     <div class="container">
         <h2 class="text-center mb-4"> Quản lý sản phẩm</h2>
 
-        <!-- ➕ Thêm sản phẩm mới -->
+        <!-- Thêm sản phẩm mới -->
         <form method="POST" action="{{ url_for('products.add_product') }}" class="card p-4 mb-4">
             <h5>➕ Thêm sản phẩm mới</h5>
             <input class="form-control mb-2" type="text" name="id" placeholder="Mã sản phẩm" required>
@@ -22,15 +22,21 @@
             <button class="btn btn-custom w-100">Thêm sản phẩm</button>
         </form>
 
-        <!-- 🔧 Chức năng hàng loạt -->
+        <!-- Chức năng hàng loạt -->
 
         <form method="POST" action="{{ url_for('products.discount_all') }}" class="mb-4 d-flex gap-2">
-            <input class="form-control w-25" type="number" name="discount" placeholder="Giảm giá (-)" value="5000"
+            <input class="form-control w-25" type="number" name="discount" placeholder="Giảm giá (-)" value="1000"
                 required>
             <button class="btn btn-danger">Giảm giá hàng loạt</button>
         </form>
 
-        <!-- 📦 Danh sách sản phẩm -->
+        <form method="POST" action="{{ url_for('products.increase_all') }}" class="mb-4 d-flex gap-2">
+            <input class="form-control w-25" type="number" name="increase" placeholder="Tăng giá (+)" value="1000"
+                required>
+            <button class="btn btn-success">Tăng giá hàng loạt</button>
+        </form>
+
+        <!-- Danh sách sản phẩm -->
         <h4> Danh sách sản phẩm</h4>
         <table class="table table-striped">
             <tr>

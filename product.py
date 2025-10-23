@@ -64,7 +64,7 @@ def view_products():
         products = {}
     return render_template("products.html", products=products)
 
-# Gửi task giảm giá hàng loạt
+# giảm giá
 @products_bp.route("/discount_all", methods=["POST"])
 def discount_all():
     if session.get("role") != "admin":
@@ -75,6 +75,22 @@ def discount_all():
         res = requests.post("http://127.0.0.1:7001/task", json={"action": "discount", "value": discount})
         if res.status_code == 202:
             print("Gửi nhiệm vụ giảm giá thành công!")
+    except Exception as e:
+        print(f"Lỗi khi gọi worker: {e}")
+
+    return redirect(url_for("products.admin_panel"))
+
+# tăng giá
+@products_bp.route("/increase_all", methods=["POST"])
+def increase_all():
+    if session.get("role") != "admin":
+        return redirect(url_for("auth.login"))
+
+    increase = int(request.form.get("increase", 5000))
+    try:
+        res = requests.post("http://127.0.0.1:7001/task", json={"action": "increase", "value": increase})
+        if res.status_code == 202:
+            print(" Gửi nhiệm vụ tăng giá thành công!")
     except Exception as e:
         print(f"Lỗi khi gọi worker: {e}")
 

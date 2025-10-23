@@ -41,7 +41,7 @@ def distribute_task(task):
     chunk_size = math.ceil(total / len(WORKERS))
     chunks = [items[i:i + chunk_size] for i in range(0, total, chunk_size)]
 
-    print(f"📦 Tổng {total} sản phẩm → chia thành {len(chunks)} phần cho {len(WORKERS)} worker")
+    print(f" Tổng {total} sản phẩm → chia thành {len(chunks)} phần cho {len(WORKERS)} worker")
 
     for i, url in enumerate(WORKERS):
         if i < len(chunks):
@@ -57,7 +57,7 @@ def distribute_task(task):
             )
             print(f"Gửi task '{action}' tới {url}: {res.status_code}")
         except Exception as e:
-            print(f"❌ Worker {url} không phản hồi: {e}")
+            print(f" Worker {url} không phản hồi: {e}")
 
 @app.route("/task", methods=["POST"])
 def receive_task():
