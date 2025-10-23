@@ -23,10 +23,6 @@
         </form>
 
         <!-- 🔧 Chức năng hàng loạt -->
-        <form method="POST" action="{{ url_for('products.update_all_prices') }}" class="mb-3 d-flex gap-2">
-            <input class="form-control w-25" type="number" name="change" placeholder="Tăng giá (+)" value="10" required>
-            <button class="btn btn-primary">Cập nhật tất cả giá</button>
-        </form>
 
         <form method="POST" action="{{ url_for('products.discount_all') }}" class="mb-4 d-flex gap-2">
             <input class="form-control w-25" type="number" name="discount" placeholder="Giảm giá (-)" value="5000"

@@ -64,22 +64,6 @@ def view_products():
         products = {}
     return render_template("products.html", products=products)
 
-# Gửi task cập nhật giá hàng loạt
-@products_bp.route("/update_all_prices", methods=["POST"])
-def update_all_prices():
-    if session.get("role") != "admin":
-        return redirect(url_for("auth.login"))
-
-    change = int(request.form.get("change", 10))
-    try:
-        res = requests.post("http://127.0.0.1:7001/task", json={"action": "update_prices", "value": change})
-        if res.status_code == 202:
-            print("Gửi nhiệm vụ cập nhật giá thành công!")
-    except Exception as e:
-        print(f"Lỗi khi gọi worker: {e}")
-
-    return redirect(url_for("products.admin_panel"))
-
 # Gửi task giảm giá hàng loạt
 @products_bp.route("/discount_all", methods=["POST"])
 def discount_all():
