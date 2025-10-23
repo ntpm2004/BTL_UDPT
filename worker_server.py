@@ -24,6 +24,10 @@ def load_products():
             return json.load(f)
         except json.JSONDecodeError:
             return {}
+        
+def save_products(data):
+    with open(DB_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
 def distribute_task(task):
     action = task.get("action")
@@ -64,6 +68,18 @@ def receive_task():
     task = request.get_json()
     Thread(target=distribute_task, args=(task,)).start()
     return jsonify({"status": "accepted"}), 202
+
+@app.route("/sync", methods=["POST"])
+def sync_from_worker():
+    new_data = request.get_json().get("data", {})
+    all_data = load_products()
+
+    # Gộp dữ liệu mới vào file chính
+    all_data.update(new_data)
+    save_products(all_data)
+
+    print(f"Đã đồng bộ {len(new_data)} sản phẩm từ 1 worker về master")
+    return jsonify({"status": "synced"}), 200
 
 if __name__ == "__main__":
     app.run(port=7001)
