@@ -10,10 +10,11 @@ products_db = PupDB("products.json")
 def admin_panel():
     if session.get("role") != "admin":
         return redirect(url_for("auth.login"))
+    products = {}
     try:
         products = {pid: products_db.get(pid) for pid in products_db.keys()}
-    except:
-        products = {}
+    except Exception as e:
+        print("Lỗi khi đọc sản phẩm:", e)
     return render_template("admin.html", products=products)
 
 # Thêm sản phẩm
@@ -26,6 +27,12 @@ def add_product():
     price = int(request.form["price"])
     qty = int(request.form["quantity"])
     products_db.set(pid, {"name": name, "price": price, "quantity": qty})
+    try:
+        res = requests.post("http://127.0.0.1:7001/sync", json={"data": {pid: {"name": name, "price": price, "quantity": qty}}})
+        if res.status_code == 200:
+            print("Đã đồng bộ sản phẩm mới đến các worker.")
+    except Exception as e:
+            print(f"Lỗi khi gửi đồng bộ: {e}")
     return redirect(url_for("products.admin_panel"))
 
 # Sửa sản phẩm
@@ -45,6 +52,12 @@ def update_product(pid):
     price = int(request.form["price"])
     qty = int(request.form["quantity"])
     products_db.set(pid, {"name": name, "price": price, "quantity": qty})
+    try:
+        res = requests.post("http://127.0.0.1:7001/sync", json={"data": {pid: {"name": name, "price": price, "quantity": qty}}})
+        if res.status_code == 200:
+            print("Đã đồng bộ bản cập nhật sản phẩm đến các worker.")
+    except Exception as e:
+        print(f"Lỗi khi gửi đồng bộ: {e}")
     return redirect(url_for("products.admin_panel"))
 
 # Xóa sản phẩm
@@ -53,6 +66,12 @@ def delete_product(pid):
     if session.get("role") != "admin":
         return redirect(url_for("auth.login"))
     products_db.remove(pid)
+    try:
+        res = requests.post("http://127.0.0.1:7001/delete_sync", json={"id": pid})
+        if res.status_code == 200:
+            print(f"Đã đồng bộ xóa sản phẩm {pid} đến các worker.")
+    except Exception as e:
+        print(f"Lỗi khi gửi đồng bộ xóa: {e}")
     return redirect(url_for("products.admin_panel"))
 
 # Xem sản phẩm
