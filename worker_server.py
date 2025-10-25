@@ -112,7 +112,7 @@ def sync_from_worker():
 
     print(f"Đã đồng bộ {len(new_data)} sản phẩm từ worker về master")
 
-    # 🔁 Gửi lại dữ liệu này cho các worker khác
+    # Gửi lại dữ liệu này cho các worker khác
     broadcast_to_workers(new_data)
 
     return jsonify({"status": "synced"}), 200
